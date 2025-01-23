@@ -1,0 +1,78 @@
+
+
+/* Make sure the html and body take up the full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* App wrapper to make it full screen */
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+/* Light theme styles */
+.light {
+  background-color: var(--light-bg); /* Sets the background to light mode's background */
+  color: var(--light-text); /* Sets text color to light mode's text */
+  display: fixed;
+  margin: auto;
+  text-align: center;
+  font-family: var(--font-sci-fi); /* Uses the sci-fi font family */
+  transition: all 0.3s ease; /* Smooth transition for theme changes */
+}
+
+/* Dark theme styles */
+.dark {
+  background-color: var(--dark-bg); /* Sets the background to dark mode's background */
+  color: var(--dark-text); /* Sets text color to dark mode's text */
+  display: fixed;
+  margin: auto;
+  text-align: center;
+  font-family: var(--font-sci-fi); /* Uses the sci-fi font family */
+  transition: all 0.3s ease; /* Smooth transition for theme changes */
+}
+
+/* Ensure the navigation bar and content stretch to fill the page */
+nav, .content {
+  flex-grow: 1;
+}
+
+/* Button and logo styles */
+button {
+  background: none;
+  border: 1px solid currentColor;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+img {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.1);
+}
+
+
+
+.light .homepage {
+  margin: auto;
+}
+
+.dark .homepage {
+  margin: auto;
+}
+
+
