@@ -39,6 +39,9 @@ const[emailz,setEmailz]=useState("")
           {authToken ? (
             <>
               <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
                 <Link to="/calculator">Calculator</Link>
               </li>
               <li>

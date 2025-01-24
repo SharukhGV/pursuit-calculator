@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../App.css"
+
 function Calculator({ emailz }) {
   const [number1, setnumber1] = useState("");
   const [number2, setnumber2] = useState("");
@@ -8,7 +9,10 @@ function Calculator({ emailz }) {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [currentInput, setCurrentInput] = useState(1); // Tracks which input is active
+  const [currentInput, setCurrentInput] = useState(1);
+  const [editNumber1, setEditNumber1] = useState("");
+  const [editNumber2, setEditNumber2] = useState("");
+  const [editOperation, setEditOperation] = useState("");
 
   useEffect(() => {
     fetchHistory();
@@ -17,7 +21,7 @@ function Calculator({ emailz }) {
   const fetchHistory = async () => {
     const tokenValue = localStorage.getItem("authToken");
     try {
-      const response = await axios.get("http://localhost:5000/calculations", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_LINK}/calculations`, {
         headers: {
           Authorization: `Bearer ${tokenValue}`,
         },
@@ -80,7 +84,7 @@ function Calculator({ emailz }) {
     try {
       const tokenValue = localStorage.getItem("authToken");
       await axios.post(
-        "http://localhost:5000/calculations",
+        `${import.meta.env.VITE_BACKEND_LINK}/calculations`,
         {
           number1: num1,
           number2: num2,
@@ -106,12 +110,40 @@ function Calculator({ emailz }) {
     setResult(null);
   };
 
+  // const updateCalculation = async (id) => {
+  //   try {
+  //     await axios.put(
+  //       `${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`,
+  //       { number1, number2, operation, email: emailz },
+  //       { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+  //     );
+  //     setEditingId(null);
+  //     fetchHistory();
+  //   } catch (error) {
+  //     console.error("Update error:", error);
+  //   }
+  // };
+
+
+  const startEditing = (calc) => {
+    setEditingId(calc.id);
+    setEditNumber1(calc.number1);
+    setEditNumber2(calc.number2);
+    setEditOperation(calc.operation);
+  };
+
   const updateCalculation = async (id) => {
     try {
+      const tokenValue = localStorage.getItem("authToken");
       await axios.put(
-        `http://localhost:5000/calculations/${id}`,
-        { number1, number2, operation, email: emailz },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+        `${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`,
+        {
+          number1: editNumber1,
+          number2: editNumber2,
+          operation: editOperation,
+          email: emailz,
+        },
+        { headers: { Authorization: `Bearer ${tokenValue}` } }
       );
       setEditingId(null);
       fetchHistory();
@@ -122,7 +154,7 @@ function Calculator({ emailz }) {
 
   const deleteCalculation = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/calculations/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         data: { email: emailz },
       });
@@ -169,9 +201,37 @@ function Calculator({ emailz }) {
         {Array.isArray(history) && history.length > 0 ? (
           history.map((calc) => (
             <li key={calc.id}>
-              {calc.number1} {calc.operation} {calc.number2} = {calc.result}
-              <button onClick={() => setEditingId(calc.id)}>Edit</button>
-              <button onClick={() => deleteCalculation(calc.id)}>Delete</button>
+              {editingId === calc.id ? (
+                <div>
+                  <input
+                    type="number"
+                    value={editNumber1}
+                    onChange={(e) => setEditNumber1(e.target.value)}
+                  />
+                  <select
+                    value={editOperation}
+                    onChange={(e) => setEditOperation(e.target.value)}
+                  >
+                    <option value="add">+</option>
+                    <option value="subtract">-</option>
+                    <option value="multiply">×</option>
+                    <option value="divide">÷</option>
+                  </select>
+                  <input
+                    type="number"
+                    value={editNumber2}
+                    onChange={(e) => setEditNumber2(e.target.value)}
+                  />
+                  <button onClick={() => updateCalculation(calc.id)}>Save</button>
+                  <button onClick={() => setEditingId(null)}>Cancel</button>
+                </div>
+              ) : (
+                <>
+                  {calc.number1} {calc.operation} {calc.number2} = {calc.result}
+                  <button onClick={() => startEditing(calc)}>Edit</button>
+                  <button onClick={() => deleteCalculation(calc.id)}>Delete</button>
+                </>
+              )}
             </li>
           ))
         ) : (
