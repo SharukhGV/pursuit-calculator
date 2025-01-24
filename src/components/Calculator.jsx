@@ -21,7 +21,7 @@ function Calculator({ emailz }) {
   const fetchHistory = async () => {
     const tokenValue = localStorage.getItem("authToken");
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_LINK}/calculations`, {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/calculations`, {
         headers: {
           Authorization: `Bearer ${tokenValue}`,
         },
@@ -84,7 +84,7 @@ function Calculator({ emailz }) {
     try {
       const tokenValue = localStorage.getItem("authToken");
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_LINK}/calculations`,
+        `${import.meta.env.VITE_BACKEND}/calculations`,
         {
           number1: num1,
           number2: num2,
@@ -110,20 +110,6 @@ function Calculator({ emailz }) {
     setResult(null);
   };
 
-  // const updateCalculation = async (id) => {
-  //   try {
-  //     await axios.put(
-  //       `${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`,
-  //       { number1, number2, operation, email: emailz },
-  //       { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
-  //     );
-  //     setEditingId(null);
-  //     fetchHistory();
-  //   } catch (error) {
-  //     console.error("Update error:", error);
-  //   }
-  // };
-
 
   const startEditing = (calc) => {
     setEditingId(calc.id);
@@ -136,7 +122,7 @@ function Calculator({ emailz }) {
     try {
       const tokenValue = localStorage.getItem("authToken");
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`,
+        `${import.meta.env.VITE_BACKEND}/calculations/${id}`,
         {
           number1: editNumber1,
           number2: editNumber2,
@@ -154,7 +140,7 @@ function Calculator({ emailz }) {
 
   const deleteCalculation = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_LINK}/calculations/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND}/calculations/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         data: { email: emailz },
       });
