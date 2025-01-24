@@ -19,7 +19,7 @@ function Login({ setEmailz, emailz }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/login", { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/login`, { email, password });
       login(response.data.token);
       navigate("/calculator")
     } catch (error) {

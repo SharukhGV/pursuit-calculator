@@ -20,7 +20,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/register", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/register`, {
         email,
         password,
       });
@@ -35,7 +35,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/verify-email", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/verify-email`, {
         email,
         verificationCode,
       });
@@ -51,7 +51,7 @@ function Register() {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/resend-verification", { email });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/resend-verification`, { email });
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response.data.error || "Failed to resend verification code.");
